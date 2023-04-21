@@ -1,0 +1,3 @@
+#Féléves beadandó feladat rövid témaleírás
+
+Féléves feladatomban egy versenyautós játék megalkotása a cél. Az Electric Racing Miskolc készülő autójának modelljével lehetne versenyezni egy versenypályán az idő ellen. A játékban több kameranézet is megvalósításra kerülne (FPS, TPS, Orrkúp nézet, mozgatható kameranézet). Az autón lévő minden lámpa elem realisztikus megvalósítására törekednék. A verseny indulásakor teljes ún. startszekvencia lenne szimulálva.
