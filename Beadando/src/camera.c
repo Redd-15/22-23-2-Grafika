@@ -15,6 +15,8 @@ void init_camera(Camera* camera)
     camera->speed.x = 0.0;
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
+    camera->turn_speed_x = 0.0;
+    camera->turn_speed_y = 0.0;
 
     camera->is_preview_visible = false;
 }
@@ -31,6 +33,9 @@ void update_camera(Camera* camera, double time)
     camera->position.y += sin(angle) * camera->speed.y * time;
     camera->position.x += cos(side_angle) * camera->speed.x * time;
     camera->position.y += sin(side_angle) * camera->speed.x * time;
+    camera->position.z += camera->speed.z * time;
+
+    rotate_camera(camera, camera->turn_speed_x * time, camera->turn_speed_y * time);
 }
 
 void set_view(const Camera* camera)
@@ -73,6 +78,21 @@ void set_camera_speed(Camera* camera, double speed)
 void set_camera_side_speed(Camera* camera, double speed)
 {
     camera->speed.x = speed;
+}
+
+void set_camera_vertical_speed(Camera* camera, double speed)
+{
+    camera->speed.z = speed;    
+}
+
+void set_camera_vert_turn_speed(Camera* camera, float speed)
+{
+    camera->turn_speed_y = speed;
+}
+
+void set_camera_hor_turn_speed(Camera* camera, float speed)
+{
+    camera->turn_speed_x = speed;
 }
 
 void show_texture_preview()

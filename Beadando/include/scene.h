@@ -3,25 +3,16 @@
 
 #include "camera.h"
 #include "texture.h"
+#include "car.h"
 
 #include <obj/model.h>
 
 typedef struct Scene
 {
-    Model cube;
     Model model;
-    float x;        //x coordinate
-    float y;        //y coordinate
-    float psi;      //orientation
-    float v;        //velocity
-    float w;        //angular velocity
-    float delta;    //wheel angle
-    float r;
-    float g;
-    float b;
-    float timer;
     Material material;
     GLuint texture_id;
+    Car car;
 } Scene;
 
 /**
@@ -53,9 +44,5 @@ void render_scene(const Scene* scene);
  * Draw the origin of the world coordinate system.
  */
 void draw_origin();
-
-void set_model_x_speed(Scene* scene, double speed);
-
-void set_model_y_speed(Scene* scene, double speed);
 
 #endif /* SCENE_H */

@@ -16,7 +16,7 @@ void init_app(App* app, int width, int height)
     }
 
     app->window = SDL_CreateWindow(
-        "Cube!",
+        "RACE!",
         SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height,
         SDL_WINDOW_OPENGL);
@@ -113,29 +113,49 @@ void handle_app_events(App* app)
             case SDL_SCANCODE_ESCAPE:
                 app->is_running = false;
                 break;
-            case SDL_SCANCODE_W:
+            case SDL_SCANCODE_T:
                 set_camera_speed(&(app->camera), 1);
                 break;
-            case SDL_SCANCODE_S:
+            case SDL_SCANCODE_G:
                 set_camera_speed(&(app->camera), -1);
                 break;
-            case SDL_SCANCODE_A:
+            case SDL_SCANCODE_F:
                 set_camera_side_speed(&(app->camera), 1);
                 break;
-            case SDL_SCANCODE_D:
+            case SDL_SCANCODE_H:
                 set_camera_side_speed(&(app->camera), -1);
                 break;
-            case SDL_SCANCODE_T:
-                //set_model_y_speed(&(app->scene), 1);
+            case SDL_SCANCODE_R:
+                set_camera_vertical_speed(&(app->camera), -1);
                 break;
-            case SDL_SCANCODE_G:
-                //set_model_y_speed(&(app->scene), -1);
+            case SDL_SCANCODE_Y:
+                set_camera_vertical_speed(&(app->camera), 1);
                 break;
-            case SDL_SCANCODE_F:
-                //set_model_x_speed(&(app->scene), -1);
+
+            case SDL_SCANCODE_UP:
+                set_camera_vert_turn_speed(&(app->camera), 25.0);
                 break;
-            case SDL_SCANCODE_H:
-                //set_model_x_speed(&(app->scene), 1);
+            case SDL_SCANCODE_DOWN:
+                set_camera_vert_turn_speed(&(app->camera), -25.0);
+                break;
+            case SDL_SCANCODE_LEFT:
+                set_camera_hor_turn_speed(&(app->camera), 25.0);
+                break;
+            case SDL_SCANCODE_RIGHT:
+                set_camera_hor_turn_speed(&(app->camera), -25.0);
+                break;
+
+            case SDL_SCANCODE_W:
+                set_car_velocity(&(app->scene.car), -0.1);
+                break;
+            case SDL_SCANCODE_S:
+                set_car_velocity(&(app->scene.car), 0.1);
+                break;
+            case SDL_SCANCODE_A:
+                set_car_turning(&(app->scene.car), -10);
+                break;
+            case SDL_SCANCODE_D:
+                set_car_turning(&(app->scene.car), 10);
                 break;
             default:
                 break;
@@ -143,21 +163,33 @@ void handle_app_events(App* app)
             break;
         case SDL_KEYUP:
             switch (event.key.keysym.scancode) {
-            case SDL_SCANCODE_W:
-            case SDL_SCANCODE_S:
-                set_camera_speed(&(app->camera), 0);
-                break;
-            case SDL_SCANCODE_A:
-            case SDL_SCANCODE_D:
-                set_camera_side_speed(&(app->camera), 0);
-                break;
             case SDL_SCANCODE_T:
             case SDL_SCANCODE_G:
-                //set_model_y_speed(&(app->scene), 0);
+                set_camera_speed(&(app->camera), 0);
                 break;
             case SDL_SCANCODE_F:
             case SDL_SCANCODE_H:
-                //set_model_x_speed(&(app->scene), 0);
+                set_camera_side_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_R:
+            case SDL_SCANCODE_Y:
+                set_camera_vertical_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_UP:
+            case SDL_SCANCODE_DOWN:
+                set_camera_vert_turn_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_LEFT:
+            case SDL_SCANCODE_RIGHT:
+                set_camera_hor_turn_speed(&(app->camera), 0);
+                break;
+            case SDL_SCANCODE_W:
+            case SDL_SCANCODE_S:
+                set_car_velocity(&(app->scene.car), 0);
+                break;
+            case SDL_SCANCODE_A:
+            case SDL_SCANCODE_D:
+                set_car_turning(&(app->scene.car), 0);
                 break;
             default:
                 break;

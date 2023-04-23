@@ -7,22 +7,8 @@
 
 void init_scene(Scene* scene)
 {
-    load_model(&(scene->cube), "assets/models/cube.obj");
-    load_model(&(scene->model), "assets/models/cat.obj");
+    load_model(&(scene->model), "assets/models/cube.obj");
     scene->texture_id = load_texture("assets/textures/cube.png");
-
-    scene->x=0.0; 
-    scene->y=2.0; 
-    scene->psi=0.0; 
-    scene->v=0.0;
-    scene->w=0.0; 
-    scene->delta=0.0; 
-    scene->r = 1.0;
-    scene->g = 1.0;
-    scene->b = 1.0;
-    scene->timer = 0.0;
-    srand((unsigned) time(scene->timer));
-
     glBindTexture(GL_TEXTURE_2D, scene->texture_id);
 
     scene->material.ambient.red = 0.6;
@@ -38,11 +24,13 @@ void init_scene(Scene* scene)
     scene->material.specular.blue = 1.0;
 
     scene->material.shininess = 1.0;
+
+    init_car(&(scene->car));
 }
 
-void set_lighting(Scene * scene)
+void set_lighting()
 {
-    float ambient_light[] = { scene->r, scene->g, scene->b, 1.0f };
+    float ambient_light[] = { 1.0, 1.0, 1.0, 1.0f };
     float diffuse_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
     float specular_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
     float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
@@ -82,17 +70,7 @@ void set_material(const Material* material)
 
 void update_scene(Scene* scene, double time)
 {
-
-
-
-scene->timer += time;
-if (scene->timer > 1.0){
-    scene->timer = 0.0;
-    scene->r = (float)rand()/45520.0;
-    scene->g = (float)rand()/45520.0;
-    scene->b = (float)rand()/45520.0;
-}
-
+    update_car(&(scene->car), time);
 }
 
 void render_scene(const Scene* scene)
@@ -100,12 +78,10 @@ void render_scene(const Scene* scene)
     set_material(&(scene->material));
     set_lighting(scene);
     draw_origin();
-
-    glTranslatef((scene->x), (scene->y), 0.0);
-    glRotatef(90.0, 1.0 ,0.0 ,0.0);
-    glDisable(GL_TEXTURE_2D);
+    glPushMatrix();
     draw_model(&(scene->model));
-    glEnable(GL_TEXTURE_2D);
+    glPopMatrix();
+    render_car(&(scene->car));
 }
 
 
