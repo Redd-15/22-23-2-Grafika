@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include <math.h>
 
-#define MIN_SPEED -100
-#define MAX_SPEED 300
+#define MIN_SPEED -3
+#define MAX_SPEED 10
 #define MAX_TURN 0.5
+#define CAR_LEN 1
 
 void init_car(Car* car)
 {
@@ -82,11 +83,18 @@ void set_car_material(const Material* material)
 
 void update_car(Car* car, double time)
 {
-    /*if (car->v > 0){car->v -= 0.05;}
-    else if (car->v < 0){car->v += 0.05;}*/
-    car->y += car->v * time;
+    float w = 0.0;
+    w = car->v * tan(car->delta) / CAR_LEN;
+
+    car->x += car->v * time * cos(car->psi + w * time/2);
+    car->y += car->v * time * sin(car->psi + w * time/2);
+    
+    car->psi += w * time; 
     car->timer += time;
+
+    printf("%f || %f || %f\n", car->x, car->y, car->delta);
 }
+
 void render_car(const Car* car)
 {
     set_car_material(&(car->material));
@@ -94,11 +102,15 @@ void render_car(const Car* car)
 
     glTranslatef((car->x), (car->y), 0.0);
     glRotatef(90.0, 1.0 ,0.0 ,0.0);
+    glRotatef((radian_to_degree(car->psi))+90.0, 0.0 ,1.0 ,0.0);
+    printf("%f \n", radian_to_degree(car->psi));
     //glRotatef(car->psi, 0.0 ,0.0 ,1.0);
     glDisable(GL_TEXTURE_2D);
     draw_model(&(car->model));
     glEnable(GL_TEXTURE_2D);
 }
+
+
 
 void set_car_velocity(Car* car, float vel)
 {
@@ -110,8 +122,8 @@ void set_car_velocity(Car* car, float vel)
 void set_car_turning(Car* car, float delta)
 {
     car->delta += delta;
-    if (car->delta < MAX_TURN){car->delta = -MAX_TURN;}
-    else if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
+    if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
+    else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
 }
 
 

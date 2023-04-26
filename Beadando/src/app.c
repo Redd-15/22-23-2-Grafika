@@ -146,16 +146,16 @@ void handle_app_events(App* app)
                 break;
 
             case SDL_SCANCODE_W:
-                set_car_velocity(&(app->scene.car), -0.1);
-                break;
-            case SDL_SCANCODE_S:
                 set_car_velocity(&(app->scene.car), 0.1);
                 break;
+            case SDL_SCANCODE_S:
+                set_car_velocity(&(app->scene.car), -0.1);
+                break;
             case SDL_SCANCODE_A:
-                set_car_turning(&(app->scene.car), -10);
+                set_car_turning(&(app->scene.car), 0.05);
                 break;
             case SDL_SCANCODE_D:
-                set_car_turning(&(app->scene.car), 10);
+                set_car_turning(&(app->scene.car), -0.05);
                 break;
             default:
                 break;
@@ -185,7 +185,7 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_S:
-                set_car_velocity(&(app->scene.car), 0);
+                set_car_velocity(&(app->scene.car), -0.02);
                 break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_D:
