@@ -21,6 +21,7 @@ void init_car(Car* car)
     car->v=0.0;
     car->w=0.0; 
     car->delta=0.0; 
+    car->turn_speed=0.0;
     car->timer = 0.0;
     //srand((unsigned) time(car->timer));
 
@@ -83,6 +84,11 @@ void set_car_material(const Material* material)
 
 void update_car(Car* car, double time)
 {
+    car->delta += car->turn_speed * time;
+    if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
+    else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
+
+
     float w = 0.0;
     w = car->v * tan(car->delta) / CAR_LEN;
 
@@ -119,11 +125,9 @@ void set_car_velocity(Car* car, float vel)
     else if (car->v > MAX_SPEED){car->v = MAX_SPEED;}
 }
 
-void set_car_turning(Car* car, float delta)
+void set_car_turning_speed(Car* car, float speed)
 {
-    car->delta += delta;
-    if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
-    else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
+    car->turn_speed = speed;
 }
 
 

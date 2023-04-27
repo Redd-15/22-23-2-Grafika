@@ -15,6 +15,7 @@ typedef struct Car
     float v;        //velocity
     float w;        //angular velocity
     float delta;    //wheel angle
+    float turn_speed;
     float timer;
     Material material;
     GLuint texture_id;
@@ -42,7 +43,7 @@ void render_car(const Car* car);
 
 void set_car_velocity(Car* car, float vel);
 
-void set_car_turning(Car* car, float delta);
+void set_car_turning_speed(Car* car, float speed);
 
 
 #endif /* CAR_H */
