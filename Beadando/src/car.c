@@ -42,7 +42,7 @@ void init_car(Car* car)
     car->material.shininess = 1.0;
 }
 
-/*void set_car_lighting(Car * car)
+void set_car_lighting(Car * car)
 {
     float ambient_light[] = { 1.0, 1.0, 1.0, 1.0f };
     float diffuse_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
@@ -53,7 +53,7 @@ void init_car(Car* car)
     glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
     glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light);
     glLightfv(GL_LIGHT0, GL_POSITION, position);
-}*/
+}
 
 void set_car_material(const Material* material)
 {
@@ -104,14 +104,13 @@ void update_car(Car* car, double time)
 void render_car(const Car* car)
 {
     set_car_material(&(car->material));
-    //set_car_lighting(car);
+    set_car_lighting(car);
 
     glTranslatef((car->x), (car->y), 0.0);
-    //glRotatef(90.0, 0.0 ,0.0 ,-1.0);
-    glRotatef((radian_to_degree(car->psi)), 0.0 ,1.0 ,0.0);
+    glRotatef((radian_to_degree(car->psi)), 0.0 ,0.0 ,1.0);
+    
     printf("%f \n", radian_to_degree(car->psi));
-    //glRotatef(car->psi, 0.0 ,0.0 ,1.0);
-    //glScalef(0.01,0.01,0.01);
+
     glDisable(GL_TEXTURE_2D);
     draw_model(&(car->model));
     glEnable(GL_TEXTURE_2D);
