@@ -90,7 +90,7 @@ void reshape(GLsizei width, GLsizei height)
     glViewport(x, y, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-0.1920, 0.1920, -0.1080, 0.1080, 0.22029071700823, 100);
+    glFrustum(-0.1920, 0.1920, -0.1080, 0.1080, 0.22029071700823, 10000);
 }
 
 void handle_app_events(App* app)

@@ -12,7 +12,7 @@
 
 void init_car(Car* car)
 {
-    load_model(&(car->model), "assets/models/cat.obj");
+    load_model(&(car->model), "assets/models/Car_assembly.obj");
     car->texture_id = load_texture("assets/textures/cube.png");
 
     car->x=0.0; 
@@ -107,10 +107,11 @@ void render_car(const Car* car)
     //set_car_lighting(car);
 
     glTranslatef((car->x), (car->y), 0.0);
-    glRotatef(90.0, 1.0 ,0.0 ,0.0);
-    glRotatef((radian_to_degree(car->psi))+90.0, 0.0 ,1.0 ,0.0);
+    //glRotatef(90.0, 0.0 ,0.0 ,-1.0);
+    glRotatef((radian_to_degree(car->psi)), 0.0 ,1.0 ,0.0);
     printf("%f \n", radian_to_degree(car->psi));
     //glRotatef(car->psi, 0.0 ,0.0 ,1.0);
+    //glScalef(0.01,0.01,0.01);
     glDisable(GL_TEXTURE_2D);
     draw_model(&(car->model));
     glEnable(GL_TEXTURE_2D);
