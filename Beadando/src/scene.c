@@ -79,9 +79,10 @@ void render_scene(const Scene* scene)
     set_lighting(scene);
     draw_origin();
     glPushMatrix();
-    draw_model(&(scene->model));
+    //draw_model(&(scene->model));
     glPopMatrix();
     render_car(&(scene->car));
+    
 }
 
 
