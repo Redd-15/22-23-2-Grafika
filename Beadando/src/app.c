@@ -90,7 +90,7 @@ void reshape(GLsizei width, GLsizei height)
     glViewport(x, y, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-0.1920, 0.1920, -0.1080, 0.1080, 0.22029071700823, 10000);
+    glFrustum(-0.01920, 0.01920, -0.01080, 0.01080, 0.01, 10000);
 }
 
 void handle_app_events(App* app)
@@ -128,6 +128,23 @@ void handle_app_events(App* app)
                 set_camera_vertical_speed(&(app->camera), 1);
                 break;
 
+            case SDL_SCANCODE_P:
+                initiateStartSequence(&(app->scene));
+                break;
+
+            case SDL_SCANCODE_1:
+                switch_camera_mode(&(app->camera), 1);
+                break;
+            case SDL_SCANCODE_2:
+                switch_camera_mode(&(app->camera), 2);
+                break;
+            case SDL_SCANCODE_3:
+                switch_camera_mode(&(app->camera), 3);
+                break;
+            case SDL_SCANCODE_4:
+                switch_camera_mode(&(app->camera), 4);
+                break;
+
             case SDL_SCANCODE_UP:
                 set_camera_vert_turn_speed(&(app->camera), 25.0);
                 break;
@@ -148,10 +165,10 @@ void handle_app_events(App* app)
                 set_car_velocity(&(app->scene.car), -0.1);
                 break;
             case SDL_SCANCODE_A:
-                set_car_turning_speed(&(app->scene.car), 1);
+                set_car_turning_speed(&(app->scene.car), 0.8);
                 break;
             case SDL_SCANCODE_D:
-                set_car_turning_speed(&(app->scene.car), -1);
+                set_car_turning_speed(&(app->scene.car), -0.8);
                 break;
             default:
                 break;
@@ -181,7 +198,7 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_W:
             case SDL_SCANCODE_S:
-                set_car_velocity(&(app->scene.car), -0.02);
+                set_car_velocity(&(app->scene.car), 0);
                 break;
             case SDL_SCANCODE_A:
             case SDL_SCANCODE_D:
@@ -223,8 +240,8 @@ void update_app(App* app)
     elapsed_time = current_time - app->uptime;
     app->uptime = current_time;
 
-    update_camera(&(app->camera), elapsed_time);
     update_scene(&(app->scene), elapsed_time);
+    update_camera(&(app->camera), &(app->scene.car), elapsed_time);
 }
 
 void render_app(App* app)

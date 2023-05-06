@@ -2,6 +2,7 @@
 #define CAMERA_H
 
 #include "utils.h"
+#include "car.h"
 
 #include <stdbool.h>
 
@@ -16,6 +17,7 @@ typedef struct Camera
     float turn_speed_x;
     float turn_speed_y;
     bool is_preview_visible;
+    int camera_mode;
 } Camera;
 
 /**
@@ -26,7 +28,7 @@ void init_camera(Camera* camera);
 /**
  * Update the position of the camera.
  */
-void update_camera(Camera* camera, double time);
+void update_camera(Camera* camera, Car* car, double time);
 
 /**
  * Apply the camera settings to the view transformation.
@@ -58,5 +60,7 @@ void set_camera_vert_turn_speed(Camera* camera, float speed);
 void set_camera_hor_turn_speed(Camera* camera, float speed);
 
 void show_texture_preview();
+
+void switch_camera_mode(Camera* camera, int mode);
 
 #endif /* CAMERA_H */

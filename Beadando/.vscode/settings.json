@@ -2,6 +2,7 @@
     "files.associations": {
         "cstdlib": "c",
         "limits": "c",
-        "*.tcc": "c"
+        "*.tcc": "c",
+        "car.h": "c"
     }
 }

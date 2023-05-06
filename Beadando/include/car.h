@@ -1,14 +1,14 @@
 #ifndef CAR_H
 #define CAR_H
 
-#include "camera.h"
 #include "texture.h"
+#include "utils.h"
 
 #include <obj/model.h>
 
 typedef struct Car
 {
-    Model model;
+    Model model, steering_wheel, wheels;
     float x;        //x coordinate
     float y;        //y coordinate
     float psi;      //orientation
@@ -16,9 +16,10 @@ typedef struct Car
     float w;        //angular velocity
     float delta;    //wheel angle
     float turn_speed;
+    float wheel_angle;
     float timer;
     Material material;
-    GLuint texture_id;
+    GLuint SWheel_texture, Car_texture, Wheel_texture;
 } Car;
 
 /**
@@ -31,6 +32,7 @@ void init_car(Car* car);
  */
 void set_car_material(const Material* material);
 
+void set_car_lighting();
 /**
  * Update the car.
  */

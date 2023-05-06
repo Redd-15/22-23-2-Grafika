@@ -9,10 +9,13 @@
 
 typedef struct Scene
 {
-    Model model;
+    Model track, lights, start_line, grandstand, skybox;
     Material material;
-    GLuint texture_id;
+    GLuint texture_track, texture_track_side, texture_lights[6], texture_start_line, texture_grandstand, texture_skybox;
     Car car;
+    float timer;
+    bool timerRunning;
+
 } Scene;
 
 /**
@@ -35,10 +38,14 @@ void set_material(const Material* material);
  */
 void update_scene(Scene* scene, double time);
 
+void initiateStartSequence(Scene* scene);
+
+int getLightID(Scene* scene);
+
 /**
  * Render the scene objects.
  */
-void render_scene(const Scene* scene);
+void render_scene(Scene* scene);
 
 /**
  * Draw the origin of the world coordinate system.

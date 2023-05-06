@@ -17,11 +17,12 @@ void init_camera(Camera* camera)
     camera->speed.z = 0.0;
     camera->turn_speed_x = 0.0;
     camera->turn_speed_y = 0.0;
+    camera->camera_mode = 1;
 
     camera->is_preview_visible = false;
 }
 
-void update_camera(Camera* camera, double time)
+void update_camera(Camera* camera, Car* car, double time)
 {
     double angle;
     double side_angle;
@@ -29,13 +30,40 @@ void update_camera(Camera* camera, double time)
     angle = degree_to_radian(camera->rotation.z);
     side_angle = degree_to_radian(camera->rotation.z + 90.0);
 
-    camera->position.x += cos(angle) * camera->speed.y * time;
-    camera->position.y += sin(angle) * camera->speed.y * time;
-    camera->position.x += cos(side_angle) * camera->speed.x * time;
-    camera->position.y += sin(side_angle) * camera->speed.x * time;
-    camera->position.z += camera->speed.z * time;
+    switch (camera->camera_mode)
+    {
+    case 1:
+        camera->position.x += cos(angle) * camera->speed.y * time;
+        camera->position.y += sin(angle) * camera->speed.y * time;
+        camera->position.x += cos(side_angle) * camera->speed.x * time;
+        camera->position.y += sin(side_angle) * camera->speed.x * time;
+        camera->position.z += camera->speed.z * time;
+        rotate_camera(camera, camera->turn_speed_x * time, camera->turn_speed_y * time);
+        break;
+    case 2:
 
-    rotate_camera(camera, camera->turn_speed_x * time, camera->turn_speed_y * time);
+        camera->position.x = car->x;
+        camera->position.y = car->y;
+        camera->position.z = 0.07;
+        rotate_camera(camera, (radian_to_degree(car->w)*time), 0);
+        rotate_camera(camera, camera->turn_speed_x * time, camera->turn_speed_y * time);
+        break;
+    
+    case 3:
+
+        camera->position.x = car->x;
+        camera->position.y = car->y;
+        camera->position.z = 0.1;
+        rotate_camera(camera, (radian_to_degree(car->w)*time), 0);
+        rotate_camera(camera, camera->turn_speed_x * time, camera->turn_speed_y * time);
+        break;
+    
+    default:
+        break;
+    }
+    
+
+    
 }
 
 void set_view(const Camera* camera)
@@ -120,4 +148,10 @@ void show_texture_preview()
     glDisable(GL_COLOR_MATERIAL);
     glEnable(GL_LIGHTING);
     glEnable(GL_DEPTH_TEST);
+}
+
+void switch_camera_mode(Camera* camera, int mode)
+{
+    camera->camera_mode = mode;
+    //printf("%d\n", mode);
 }

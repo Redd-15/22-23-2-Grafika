@@ -8,12 +8,18 @@
 #define MIN_SPEED -3
 #define MAX_SPEED 10
 #define MAX_TURN 0.5
-#define CAR_LEN 1
+#define CAR_LEN 0.2
+#define WHEEL_RADIUS 0.015
 
 void init_car(Car* car)
 {
     load_model(&(car->model), "assets/models/Car_assembly.obj");
-    car->texture_id = load_texture("assets/textures/cube.png");
+    load_model(&(car->steering_wheel), "assets/models/SteeringWheel.obj");
+    load_model(&(car->wheels), "assets/models/Wheel.obj");
+    
+    car->SWheel_texture = load_texture("assets/textures/sWheel.jpg");
+    car->Car_texture = load_texture("assets/textures/Car.jpg");
+    car->Wheel_texture = load_texture("assets/textures/wheels.jpg");
 
     car->x=0.0; 
     car->y=0.0; 
@@ -22,10 +28,8 @@ void init_car(Car* car)
     car->w=0.0; 
     car->delta=0.0; 
     car->turn_speed=0.0;
+    car->wheel_angle = 0.0;
     car->timer = 0.0;
-    //srand((unsigned) time(car->timer));
-
-    glBindTexture(GL_TEXTURE_2D, car->texture_id);
 
     car->material.ambient.red = 0.6;
     car->material.ambient.green = 0.6;
@@ -42,7 +46,7 @@ void init_car(Car* car)
     car->material.shininess = 1.0;
 }
 
-void set_car_lighting(Car * car)
+void set_car_lighting()
 {
     float ambient_light[] = { 1.0, 1.0, 1.0, 1.0f };
     float diffuse_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
@@ -84,36 +88,75 @@ void set_car_material(const Material* material)
 
 void update_car(Car* car, double time)
 {
-    car->delta += car->turn_speed * time;
-    if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
-    else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
+        car->delta += car->turn_speed * time;
+        if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
+        else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
 
 
-    float w = 0.0;
-    w = car->v * tan(car->delta) / CAR_LEN;
+        car->w = car->v * tan(car->delta) / CAR_LEN;
 
-    car->x += car->v * time * cos(car->psi + w * time/2);
-    car->y += car->v * time * sin(car->psi + w * time/2);
-    
-    car->psi += w * time; 
-    car->timer += time;
+        car->x += car->v * time * cos(car->psi + car->w * time/2);
+        car->y += car->v * time * sin(car->psi + car->w * time/2);
+        
+        car->psi += car->w * time; 
+        car->timer += time;
 
-    printf("%f || %f || %f\n", car->x, car->y, car->delta);
+        car->wheel_angle += (car->v/WHEEL_RADIUS);
+
+        while (car->wheel_angle > 360)
+        {
+            car->wheel_angle -= 360;
+        }
+
+        if (car->delta != 0){car->delta -= car->delta*0.05;}
 }
 
 void render_car(const Car* car)
 {
     set_car_material(&(car->material));
-    set_car_lighting(car);
+    set_car_lighting();
 
     glTranslatef((car->x), (car->y), 0.0);
     glRotatef((radian_to_degree(car->psi)), 0.0 ,0.0 ,1.0);
     
-    printf("%f \n", radian_to_degree(car->psi));
-
-    glDisable(GL_TEXTURE_2D);
-    draw_model(&(car->model));
+    glBindTexture(GL_TEXTURE_2D, car->Car_texture);
     glEnable(GL_TEXTURE_2D);
+    draw_model(&(car->model));
+
+    glBindTexture(GL_TEXTURE_2D, car->Wheel_texture);
+    glEnable(GL_TEXTURE_2D);
+    glPushMatrix();
+    glTranslatef(0.05,0.06,0.0227);
+    glRotatef((radian_to_degree(car->delta)/2), 0.0 ,0.0 ,1.0);
+    glRotatef(car->wheel_angle, 0.0 ,1.0 ,0.0);
+    draw_model(&(car->wheels));
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(0.05,-0.06,0.0227);
+    glRotatef((radian_to_degree(car->delta)/2)+180, 0.0 ,0.0 ,1.0);
+    glRotatef(-car->wheel_angle, 0.0 ,1.0 ,0.0);
+    draw_model(&(car->wheels));
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.11,0.06,0.0227);
+    glRotatef(car->wheel_angle, 0.0 ,1.0 ,0.0);
+    draw_model(&(car->wheels));
+    glPopMatrix();
+
+    glPushMatrix();
+    glTranslatef(-0.11,-0.06,0.0227);
+    glRotatef(180, 0.0 ,0.0 ,1.0);
+    glRotatef(-car->wheel_angle, 0.0 ,1.0 ,0.0);
+    draw_model(&(car->wheels));
+    glPopMatrix();
+
+    glTranslatef(0.018, 0.0, 0.051);
+    glRotatef((radian_to_degree(car->delta))*-4, 1.0 ,0.0 ,0.0);
+    glBindTexture(GL_TEXTURE_2D, car->SWheel_texture);
+    glEnable(GL_TEXTURE_2D);
+    draw_model(&(car->steering_wheel));
 }
 
 
