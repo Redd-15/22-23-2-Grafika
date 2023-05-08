@@ -55,12 +55,24 @@ void set_camera_side_speed(Camera* camera, double speed);
  */
 void set_camera_vertical_speed(Camera* camera, double speed);
 
+/**
+ * Set the speed of camera turning in the vertical direction.
+ */
 void set_camera_vert_turn_speed(Camera* camera, float speed);
 
+/**
+ * Set the speed of camera turning in the horizontal direction.
+ */
 void set_camera_hor_turn_speed(Camera* camera, float speed);
 
+/**
+ * Set the speed of up and down side steps.
+ */
 void show_texture_preview();
 
+/**
+ * Switching between the 4 camera modes (FreeCam, PilotCam, HoodCam, OutsideCam)
+ */
 void switch_camera_mode(Camera* camera, int mode);
 
 #endif /* CAMERA_H */

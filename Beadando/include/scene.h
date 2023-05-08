@@ -38,8 +38,14 @@ void set_material(const Material* material);
  */
 void update_scene(Scene* scene, double time);
 
+/**
+ * Initiate the start sequence.
+ */
 void initiateStartSequence(Scene* scene);
 
+/**
+ * Get Light texture for teh start light animation.
+ */
 int getLightID(Scene* scene);
 
 /**

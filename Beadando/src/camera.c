@@ -62,8 +62,6 @@ void update_camera(Camera* camera, Car* car, double time)
         break;
     }
     
-
-    
 }
 
 void set_view(const Camera* camera)
@@ -153,5 +151,4 @@ void show_texture_preview()
 void switch_camera_mode(Camera* camera, int mode)
 {
     camera->camera_mode = mode;
-    //printf("%d\n", mode);
 }
