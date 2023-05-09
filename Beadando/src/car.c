@@ -5,8 +5,8 @@
 #include <stdio.h>
 #include <math.h>
 
-#define MIN_SPEED -3
-#define MAX_SPEED 10
+#define MIN_SPEED -1.5
+#define MAX_SPEED 5
 #define MAX_TURN 0.5
 #define CAR_LEN 0.2
 #define WHEEL_RADIUS 0.015
@@ -25,11 +25,11 @@ void init_car(Car* car)
     car->y=0.0; 
     car->psi=0.0; 
     car->v=0.0;
+    car->a=0.0;
     car->w=0.0; 
     car->delta=0.0; 
     car->turn_speed=0.0;
     car->wheel_angle = 0.0;
-    car->timer = 0.0;
 
     car->material.ambient.red = 0.6;
     car->material.ambient.green = 0.6;
@@ -46,18 +46,6 @@ void init_car(Car* car)
     car->material.shininess = 1.0;
 }
 
-void set_car_lighting()
-{
-    float ambient_light[] = { 1.0, 1.0, 1.0, 1.0f };
-    float diffuse_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
-    float specular_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
-    float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
-
-    glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
-    glLightfv(GL_LIGHT0, GL_DIFFUSE, diffuse_light);
-    glLightfv(GL_LIGHT0, GL_SPECULAR, specular_light);
-    glLightfv(GL_LIGHT0, GL_POSITION, position);
-}
 
 void set_car_material(const Material* material)
 {
@@ -82,12 +70,25 @@ void set_car_material(const Material* material)
     glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, ambient_material_color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, diffuse_material_color);
     glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, specular_material_color);
-
     glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, &(material->shininess));
 }
 
 void update_car(Car* car, double time)
-{
+{              
+        if((car->v < 0.000000000001 && car->v > -0.000000000001) || isnan(time)){
+            time = 0.05;
+        }
+
+        car->v += car->a * time;
+        if (car->a == 0){
+            car->v += car->v*-0.03;
+        }
+
+        //printf("%f | %f | %f | %f\n",time, car->v, car->a, car->turn_speed);
+
+        if (car->v < MIN_SPEED){car->v = MIN_SPEED;}
+        else if (car->v > MAX_SPEED){car->v = MAX_SPEED;}
+
         car->delta += car->turn_speed * time;
         if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
         else if (car->delta < -MAX_TURN){car->delta = -MAX_TURN;}
@@ -99,7 +100,6 @@ void update_car(Car* car, double time)
         car->y += car->v * time * sin(car->psi + car->w * time/2);
         
         car->psi += car->w * time; 
-        car->timer += time;
 
         car->wheel_angle += (car->v/WHEEL_RADIUS);
 
@@ -114,7 +114,6 @@ void update_car(Car* car, double time)
 void render_car(const Car* car)
 {
     set_car_material(&(car->material));
-    set_car_lighting();
 
     glTranslatef((car->x), (car->y), 0.0);
     glRotatef((radian_to_degree(car->psi)), 0.0 ,0.0 ,1.0);
@@ -161,16 +160,22 @@ void render_car(const Car* car)
 
 
 
-void set_car_velocity(Car* car, float vel)
+void set_car_acc(Car* car, float vel)
 {
-    car->v += vel;
-    if (car->v < MIN_SPEED){car->v = MIN_SPEED;}
-    else if (car->v > MAX_SPEED){car->v = MAX_SPEED;}
+    car->a = vel;
 }
 
 void set_car_turning_speed(Car* car, float speed)
 {
-    car->turn_speed = speed;
-}
+    if (car->v > 0){
+        car->turn_speed = speed*(MAX_SPEED/car->v*0.1f);
+    }
+    else if (car->v < 0){
+        car->turn_speed = speed*(MAX_SPEED/car->v*-0.1f);
+    }
+    else {
+        car->turn_speed = speed;
+    }
 
+}
 

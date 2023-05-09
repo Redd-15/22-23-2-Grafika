@@ -13,8 +13,9 @@ typedef struct Scene
     Material material;
     GLuint texture_track, texture_track_side, texture_lights[6], texture_start_line, texture_grandstand, texture_skybox;
     Car car;
-    float timer;
+    float timer, light_intensity;
     bool timerRunning;
+
 
 } Scene;
 
@@ -23,10 +24,11 @@ typedef struct Scene
  */
 void init_scene(Scene* scene);
 
+void change_light(Scene* scene);
 /**
  * Set the lighting of the scene.
  */
-void set_lighting();
+void set_lighting(Scene* scene);
 
 /**
  * Set the current material.
@@ -52,10 +54,5 @@ int getLightID(Scene* scene);
  * Render the scene objects.
  */
 void render_scene(Scene* scene);
-
-/**
- * Draw the origin of the world coordinate system.
- */
-void draw_origin();
 
 #endif /* SCENE_H */

@@ -9,15 +9,15 @@
 typedef struct Car
 {
     Model model, steering_wheel, wheels;
-    float x;            //x coordinate
-    float y;            //y coordinate
-    float psi;          //orientation
-    float v;            //velocity
-    float w;            //angular velocity
-    float delta;        //wheel angle
-    float turn_speed;
-    float wheel_angle;
-    float timer;
+    float x;        //x coordinate
+    float y;        //y coordinate
+    float psi;      //orientation
+    float v;        //velocity
+    float a;        //acceleration
+    float w;        //angular velocity
+    float delta;    //wheel angle
+    float turn_speed;   //angular speed of wteering wheel
+    float wheel_angle;  //the angle of the steering wheel
     Material material;
     GLuint SWheel_texture, Car_texture, Wheel_texture;
 } Car;
@@ -47,10 +47,7 @@ void update_car(Car* car, double time);
  */
 void render_car(const Car* car);
 
-/**
- * Setting car velocity.
- */
-void set_car_velocity(Car* car, float vel);
+void set_car_acc(Car* car, float vel);
 
 /**
  * Setting car steering wheel angular speed.

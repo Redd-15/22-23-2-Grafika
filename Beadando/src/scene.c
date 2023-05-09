@@ -40,14 +40,24 @@ void init_scene(Scene* scene)
     scene->timer = 0.0;
     scene->timerRunning = false;
 
+    scene->light_intensity = 0.1f;
+
     init_car(&(scene->car));
 }
 
-void set_lighting()
+void change_light(Scene* scene){
+
+    scene->light_intensity += 0.1f;
+    if (scene->light_intensity > 1.0f){
+        scene->light_intensity = 0.0f;
+    }
+} 
+
+void set_lighting(Scene* scene)
 {
-    float ambient_light[] = { 1.0, 1.0, 1.0, 1.0f };
-    float diffuse_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
-    float specular_light[] = { (float)230/255, (float)230/255, (float)255/255, 1.0f };
+    float ambient_light[] = {1.0, 1.0, 1.0, 1.0f };
+    float diffuse_light[] = { scene->light_intensity, scene->light_intensity, scene->light_intensity, 1.0f };
+    float specular_light[] = { scene->light_intensity, scene->light_intensity, scene->light_intensity, 1.0f };
     float position[] = { 0.0f, 0.0f, 10.0f, 1.0f };
 
     glLightfv(GL_LIGHT0, GL_AMBIENT, ambient_light);
@@ -145,16 +155,16 @@ void render_scene(Scene* scene)
     draw_model(&(scene->skybox));
     glPopMatrix();
 
-    glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->texture_track);
     glEnable(GL_TEXTURE_2D);
     glPushMatrix();
 
     glRotatef(90, 0.0, 0.0, 1.0);
+    glScalef(1.0,-1.0,1.0);
     draw_model(&(scene->track));
 
     glBindTexture(GL_TEXTURE_2D, scene->texture_track_side);
-    glTranslatef(0.0,0.0,-0.01);
+    glTranslatef(50.0,0.0,-0.01);
     glScalef(10.0,10.0,1.0);
     draw_model(&(scene->track));
     glPopMatrix();
@@ -168,6 +178,7 @@ void render_scene(Scene* scene)
     draw_model(&(scene->lights));
     glPopMatrix();
 
+    glPushMatrix();
     glBindTexture(GL_TEXTURE_2D, scene->texture_start_line);
     glEnable(GL_TEXTURE_2D);
     glScalef(20,20,20);
@@ -177,6 +188,7 @@ void render_scene(Scene* scene)
     glPopMatrix();
 
     glPushMatrix();
+    glTranslatef(-15.0f,0,0);
     glBindTexture(GL_TEXTURE_2D, scene->texture_grandstand);
     glRotatef(90, 0, 0, 1.0);
     glTranslatef(0,0,0.1);
@@ -191,22 +203,3 @@ void render_scene(Scene* scene)
     
 }
 
-
-void draw_origin()
-{
-    glBegin(GL_LINES);
-
-    glColor3f(1, 0, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(1, 0, 0);
-
-    glColor3f(0, 1, 0);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 1, 0);
-
-    glColor3f(0, 0, 1);
-    glVertex3f(0, 0, 0);
-    glVertex3f(0, 0, 1);
-
-    glEnd();
-}
