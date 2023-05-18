@@ -16,6 +16,7 @@ typedef struct Car
     float a;        //acceleration
     float w;        //angular velocity
     float delta;    //wheel angle
+    float delta_a;
     float turn_speed;   //angular speed of wteering wheel
     float wheel_angle;  //the angle of the steering wheel
     Material material;

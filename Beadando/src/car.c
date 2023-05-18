@@ -28,6 +28,7 @@ void init_car(Car* car)
     car->a=0.0;
     car->w=0.0; 
     car->delta=0.0; 
+    car->delta_a = 0.0f;
     car->turn_speed=0.0;
     car->wheel_angle = 0.0;
 
@@ -84,10 +85,18 @@ void update_car(Car* car, double time)
             car->v += car->v*-0.03;
         }
 
-        //printf("%f | %f | %f | %f\n",time, car->v, car->a, car->turn_speed);
-
         if (car->v < MIN_SPEED){car->v = MIN_SPEED;}
         else if (car->v > MAX_SPEED){car->v = MAX_SPEED;}
+
+        if (car->v > 0){
+        car->turn_speed = car->delta_a*(MAX_SPEED/car->v*0.1f);
+        }
+        else if (car->v < 0){
+            car->turn_speed = car->delta_a*(MAX_SPEED/car->v*-0.1f);
+        }
+        else {
+            car->turn_speed = car->delta_a/2.0f;
+        }
 
         car->delta += car->turn_speed * time;
         if (car->delta > MAX_TURN){car->delta = MAX_TURN;}
@@ -109,6 +118,7 @@ void update_car(Car* car, double time)
         }
 
         if (car->delta != 0){car->delta -= car->delta*0.05;}
+
 }
 
 void render_car(const Car* car)
@@ -167,15 +177,6 @@ void set_car_acc(Car* car, float vel)
 
 void set_car_turning_speed(Car* car, float speed)
 {
-    if (car->v > 0){
-        car->turn_speed = speed*(MAX_SPEED/car->v*0.1f);
-    }
-    else if (car->v < 0){
-        car->turn_speed = speed*(MAX_SPEED/car->v*-0.1f);
-    }
-    else {
-        car->turn_speed = speed;
-    }
-
+    car->delta_a = speed;
 }
 
