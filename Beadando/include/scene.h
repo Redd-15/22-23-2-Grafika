@@ -24,6 +24,9 @@ typedef struct Scene
  */
 void init_scene(Scene* scene);
 
+/**
+ * Changing the sun intensity.
+ */
 void change_light(Scene* scene);
 /**
  * Set the lighting of the scene.

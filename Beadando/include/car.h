@@ -47,6 +47,10 @@ void update_car(Car* car, double time);
  */
 void render_car(const Car* car);
 
+
+/**
+ * Setting car acceleration parameter.
+ */
 void set_car_acc(Car* car, float vel);
 
 /**

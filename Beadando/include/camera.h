@@ -16,8 +16,9 @@ typedef struct Camera
     vec3 speed;
     float turn_speed_x;
     float turn_speed_y;
-    bool is_preview_visible;
+    bool is_manual_visible;
     int camera_mode;
+    GLuint user_manual;
 } Camera;
 
 /**
@@ -68,11 +69,17 @@ void set_camera_hor_turn_speed(Camera* camera, float speed);
 /**
  * Set the speed of up and down side steps.
  */
-void show_texture_preview();
+void show_manual_preview(Camera* camera);
 
 /**
- * Switching between the 4 camera modes (FreeCam, PilotCam, HoodCam, OutsideCam)
+ * Switching between the 4 camera modes (FreeCam, PilotCam, HoodCam, OutsideCam).
  */
 void switch_camera_mode(Camera* camera, int mode);
+
+
+/**
+ * Switching manual preview on and off.
+ */
+void switch_manual(Camera* camera);
 
 #endif /* CAMERA_H */

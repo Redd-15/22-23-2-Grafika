@@ -19,7 +19,9 @@ void init_camera(Camera* camera)
     camera->turn_speed_y = 0.0;
     camera->camera_mode = 1;
 
-    camera->is_preview_visible = false;
+    camera->is_manual_visible = true;
+
+    camera->user_manual = load_texture("assets/textures/manual.jpg");
 }
 
 void update_camera(Camera* camera, Car* car, double time)
@@ -121,8 +123,9 @@ void set_camera_hor_turn_speed(Camera* camera, float speed)
     camera->turn_speed_x = speed;
 }
 
-void show_texture_preview()
+void show_manual_preview(Camera* camera)
 {
+    glBindTexture(GL_TEXTURE_2D, camera->user_manual);
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
     glEnable(GL_COLOR_MATERIAL);
@@ -134,13 +137,13 @@ void show_texture_preview()
 
     glBegin(GL_QUADS);
     glTexCoord2f(0, 0);
-    glVertex3f(-1, 1, -3);
+    glVertex3f(-3, 3, -3);
     glTexCoord2f(1, 0);
-    glVertex3f(1, 1, -3);
+    glVertex3f(3, 3, -3);
     glTexCoord2f(1, 1);
-    glVertex3f(1, -1, -3);
+    glVertex3f(3, -3, -3);
     glTexCoord2f(0, 1);
-    glVertex3f(-1, -1, -3);
+    glVertex3f(-3, -3, -3);
     glEnd();
 
     glDisable(GL_COLOR_MATERIAL);
@@ -151,4 +154,9 @@ void show_texture_preview()
 void switch_camera_mode(Camera* camera, int mode)
 {
     camera->camera_mode = mode;
+}
+
+void switch_manual(Camera* camera)
+{
+    camera->is_manual_visible = !camera->is_manual_visible;
 }

@@ -1,4 +1,5 @@
 #include "app.h"
+#include "camera.h"
 #include <stdio.h>
 #include <SDL2/SDL_image.h>
 

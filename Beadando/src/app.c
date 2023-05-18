@@ -90,7 +90,7 @@ void reshape(GLsizei width, GLsizei height)
     glViewport(x, y, w, h);
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glFrustum(-0.01920, 0.01920, -0.01080, 0.01080, 0.01, 10000);
+    glFrustum(-0.01920, 0.01920, -0.01080, 0.01080, 0.01, 1500);
 }
 
 void handle_app_events(App* app)
@@ -131,6 +131,10 @@ void handle_app_events(App* app)
                 break;
             case SDL_SCANCODE_E:
                 set_camera_vertical_speed(&(app->camera), 1);
+                break;
+
+            case SDL_SCANCODE_M:
+                switch_manual(&(app->camera));
                 break;
 
             case SDL_SCANCODE_P:
@@ -259,8 +263,8 @@ void render_app(App* app)
     render_scene(&(app->scene));
     glPopMatrix();
 
-    if (app->camera.is_preview_visible) {
-        show_texture_preview();
+    if (app->camera.is_manual_visible) {
+        show_manual_preview(&(app->camera));
     }
 
     SDL_GL_SwapWindow(app->window);

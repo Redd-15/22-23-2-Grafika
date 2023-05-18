@@ -16,7 +16,7 @@ void init_camera(Camera* camera)
     camera->speed.y = 0.0;
     camera->speed.z = 0.0;
 
-    camera->is_preview_visible = false;
+    camera->is_preview_visible = true;
 }
 
 void update_camera(Camera* camera, double time)
